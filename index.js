@@ -6,43 +6,44 @@ const colors = [
     '#009688',
     '#795548',
   ];
-  
-const bodyRef = document.querySelector('body');
-const startBtnRef = document.querySelector('button[data-action="start"]');
-const stoptBtnRef = document.querySelector('button[data-action="stop"]');
-console.log(startBtnRef);
-console.log(bodyRef);
-let colorSwithInterval;
+
+const refs = {
+  bodyRef: document.querySelector('body'),
+  startBtnRef: document.querySelector('button[data-action="start"]'),
+  stoptBtnRef: document.querySelector('button[data-action="stop"]'),
+}  
+
 const randomIntegerFromInterval = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-// setInterval(() => {
-//   console.log('Смена цвета');
-// }, 1000);
+const colorSwitch = {
+  intervalId: null,
+  isActive: false,
+  start() {
+    if (this.isActive) {
+      return;
+    }
 
+    this.isActive = true;
+    this.intervalId = setInterval(() => {
+      refs.bodyRef.style.backgroundColor = colors[randomIntegerFromInterval(0, colors.length-1)];
+    }, 1000);
+  },
 
+  stop() {
+    clearInterval(this.intervalId);
+    this.isActive = false;
+  },
+};
 
-startBtnRef.addEventListener('click', ()  => {
-  colorSwithInterval = setInterval(() => {
-
-    console.log('Смена цвета');
-    bodyRef.style.backgroundColor = colors[randomIntegerFromInterval(0, colors.length-1)];
-  }, 1000);
+refs.startBtnRef.addEventListener('click', () => {
+  colorSwitch.start();
 });
 
-stoptBtnRef.addEventListener('click', ()  => {
-  clearInterval(colorSwithInterval);
+refs.stoptBtnRef.addEventListener('click', () => {
+  colorSwitch.stop();
 });
-
-
-// 'setInterval(colorSwith, 1000)'
-// )
- 
-
-// function colorSwith (colors) {
-//   bodyRef.className = randomIntegerFromInterval;
-// }
 
 
 
